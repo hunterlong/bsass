@@ -1,0 +1,32 @@
+@import 'variables'
+@import 'awesome'
+
+.container {
+    width: $container;
+    padding: $container-padding;
+}
+
+.container .mobile {
+    background-color: $container-color;
+    padding: $container-padding - 10;
+}
+
+.half {
+   padding: $container / 2;
+}
+
+.added {
+   padding: $container + 10;
+}
+
+.multiplied {
+   padding: $container * 10;
+}
+
+.test {
+   color: $container-color;
+}
+
+.new-div {
+   color: $container-color;
+}

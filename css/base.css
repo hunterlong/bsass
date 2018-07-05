@@ -1,0 +1,30 @@
+
+.container {
+    width: 780rem;
+    padding: 5rem;
+}
+
+.container .mobile {
+    background-color: #000000;
+    padding: -5rem;
+}
+
+.half {
+   padding: 390rem;
+}
+
+.added {
+   padding: 790rem;
+}
+
+.multiplied {
+   padding: 7800rem;
+}
+
+.test {
+   color: #000000;
+}
+
+.new-div {
+   color: #000000;
+}
