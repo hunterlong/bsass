@@ -2,13 +2,22 @@
 @import 'partial'
 @import 'mixins'
 @import 'extended'
+@import 'https://assets.statup.io/remote.css'
 
 .box {
     @include transform(rotate(30deg));
 }
 
+.box_awesome {
+    @include awesome(#bababa);
+}
+
 .message {
     @extend %message-shared;
+}
+
+.message2 {
+    @extend %awesome-design;
 }
 
 .container {

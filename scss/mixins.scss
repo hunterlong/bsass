@@ -3,3 +3,7 @@
       -ms-transform: $property;
           transform: $property;
 }
+
+@mixin awesome($property) {
+    color: $property;
+}

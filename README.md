@@ -2,13 +2,18 @@
 `bsass` is a simple application that will render SCSS files into precompile CSS files.
 
 
-# Why `bsass` and not sass.
+# Why bsass is bsass
 bsass was created to be a micro scss compiler without any requirements, all you need is the precompiled binary for your operating system.
+
+
+# No Requirements
+Unlike other sass compilers, bsass has 0 requirements. Download the lastest release for your operating system and your good to go.
 
 ## Commands
 ```
 bsass scss/base.scss css/base.css
 ```
+##### loads `base.scss` and exports a compiled css to `base.css`
 
 ## Variables
 ```scss
@@ -50,6 +55,7 @@ $container-padding: 5rem;
 ```scss
 @import 'reset'
 @import 'variables'
+@import 'https://assets.statup.io/remote.css'
 
 .container {
     width: $container;
@@ -60,6 +66,14 @@ $container-padding: 5rem;
 html, body, ul, ol {
   margin: 0;
   padding: 0;
+}
+
+.remote_location {
+    color: #bababa;
+}
+
+.awesome_test {
+    background-color: orange;
 }
 
 .container {

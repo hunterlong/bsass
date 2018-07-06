@@ -2,6 +2,13 @@ html, body, ul, ol {
   margin: 0;
   padding: 0;
 }
+.remote_location {
+    color: #bababa;
+}
+
+.awesome_test {
+    background-color: orange;
+}
 
 .box {
   -webkit-transform: rotate(30deg);
@@ -9,9 +16,17 @@ html, body, ul, ol {
           transform: rotate(30deg);
 }
 
+.box_awesome {
+    color: #bababa;
+}
+
 .message {
   border: 1px solid #ccc;
   padding: 10px;
+  color: #333;
+}
+
+.message2 {
   color: #333;
 }
 
