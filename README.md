@@ -7,7 +7,7 @@ bsass was created to be a micro scss compiler without any requirements, all you 
 
 
 # No Requirements
-Unlike other sass compilers, bsass has 0 requirements. Download the lastest release for your operating system and your good to go.
+Unlike other sass compilers, bsass has 0 requirements. Download the latest release for your operating system and your good to go.
 
 ## Commands
 ```
