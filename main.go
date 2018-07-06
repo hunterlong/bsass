@@ -29,6 +29,7 @@ func saveFile(file, data string) {
 var (
 	renderedCss []string
 	scssVars    map[string]string
+	muxinFuncs  map[string]string
 	baseCss     []string
 	compiledCss string
 	directory   string
@@ -36,6 +37,7 @@ var (
 
 func init() {
 	scssVars = make(map[string]string)
+	muxinFuncs = make(map[string]string)
 	var err error
 	directory, err = filepath.Abs(filepath.Dir(os.Args[0]))
 	if err != nil {
@@ -43,23 +45,110 @@ func init() {
 	}
 }
 
+func CollectMixin(i int, rows []string) int {
+
+	var muxColl []string
+	var count int
+	for i := i; i <= len(rows)-1; i++ {
+
+		mix := rows[i]
+		//fmt.Println(mix)
+		muxColl = append(muxColl, mix)
+		count++
+	}
+
+	compiledMixin := strings.Join(muxColl, "\n")
+
+	re := regexp.MustCompile(`\@mixin (.*?)\(`)
+	mixinFunc := re.FindStringSubmatch(compiledMixin)
+	mixName := mixinFunc[1]
+
+	muxinFuncs[mixName] = compiledMixin
+
+	re = regexp.MustCompile(`\((.*?)\)`)
+	params := re.FindStringSubmatch(compiledMixin)
+	params = strings.Split(params[1], ",")
+
+	fmt.Printf("mux: '%v' has %v parameters on %v rows\n", mixName, len(params), count)
+
+	return count
+
+}
+
 func CollectVariables(file string) map[string]string {
 	location := fmt.Sprintf("%v.scss", file)
 	importedData := openFile(location)
 	importedRows := strings.Split(string(importedData), "\n")
-	for _, i := range importedRows {
-		if len(i) < 1 {
+	for i := 0; i <= len(importedRows)-1; i++ {
+		obj := importedRows[i]
+		if len(obj) == 0 {
 			continue
 		}
-		if i[:1] != "$" {
-			baseCss = append(baseCss, i)
+
+		if obj[:1] == "@" {
+			skip := CollectMixin(i, importedRows)
+			i += skip
 			continue
 		}
-		varPass := strings.Split(i, ": ")
+
+		if obj[:1] != "$" {
+			baseCss = append(baseCss, obj)
+			continue
+		}
+
+		varPass := strings.Split(obj, ": ")
 		scssVars[varPass[0]] = varPass[1][0 : len(varPass[1])-1]
 	}
 	fmt.Printf("+ Imported %v variables from %v.scss\n", len(scssVars), file)
 	return scssVars
+}
+
+func ParseInclude(i int, rows []string) int {
+
+	var muxColl []string
+	var count int
+	for i := i; i <= len(rows)-1; i++ {
+
+		mix := rows[i]
+		//fmt.Println(mix)
+		muxColl = append(muxColl, mix)
+		count++
+	}
+
+	compiledMixin := strings.Join(muxColl, "\n")
+
+	re := regexp.MustCompile(`\@include (.*?)\(`)
+	mixinFunc := re.FindStringSubmatch(compiledMixin)
+	mixName := mixinFunc[1]
+
+	fmt.Println("include found:", mixName)
+
+	re = regexp.MustCompile(`\(.*\)`)
+	params := re.FindStringSubmatch(compiledMixin)
+
+	fmt.Println(params[0])
+
+	//muxinFuncs[mixName] = compiledMixin
+
+	re = regexp.MustCompile(`/*(.*?)\{`)
+	class := re.FindStringSubmatch(compiledMixin)
+	fmt.Println(class)
+	muxRender := RenderMixin(muxinFuncs[mixName], params[0])
+
+	baseCss = append(baseCss, muxRender)
+
+	fmt.Printf("mux: '%v' has %v parameters on %v rows\n", mixName, 0, count)
+
+	return count
+
+}
+
+func RenderMixin(mix, vars string) string {
+	re := regexp.MustCompile(`\{(.|\n)*\}`)
+	mixStyle := re.FindStringSubmatch(mix)
+	mixCorrected := mixStyle[0][2 : len(mixStyle[0])-2]
+	out := strings.Replace(mixCorrected, "$property", vars[1:len(vars)-1], 4)
+	return out
 }
 
 func main() {
@@ -82,15 +171,21 @@ func main() {
 
 	baseLines := strings.Split(string(scssFile), "\n")
 
-	for _, v := range baseLines {
+	for k, v := range baseLines {
 
 		imports := strings.Contains(v, "@import")
+		includes := strings.Contains(v, "@include")
 
 		if imports {
 
 			importFile := strings.Split(v, "'")
 
 			CollectVariables(pathJoin + "/" + importFile[1])
+
+		} else if includes {
+
+			ParseInclude(k, baseLines)
+			//baseCss = append(baseCss, "FUNCTION: "+v)
 
 		} else {
 

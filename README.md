@@ -30,12 +30,62 @@ $container-padding: 5rem;
 
 ## Math
 ```scss
-.addition {
-   padding: $container + 20;
+.math {
+   padding-left: $container - 80;
+   padding-right: $container + 20;
+   padding-bottom: $container * 10;
+   padding-top: $container / 5;
 }
 ```
 ```css
-.addition {
-   padding: 800rem;
+.math {
+   padding-left: 700rem;
+   padding-right: 800rem;
+   padding-bottom: 7800rem;
+   padding-top: 156rem;
 }
 ```
+
+## Importing
+```scss
+@import 'reset'
+@import 'variables'
+
+.container {
+    width: $container;
+    padding: $container-padding;
+}
+```
+```css
+html, body, ul, ol {
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+    width: 780rem;
+    padding: 5rem;
+}
+```
+
+## Mixins
+```scss
+@mixin transform($property) {
+  -webkit-transform: $property;
+      -ms-transform: $property;
+          transform: $property;
+}
+```
+```scss
+.box {
+    @include transform(rotate(30deg));
+}
+```
+```css
+.box {
+  -webkit-transform: rotate(30deg);
+      -ms-transform: rotate(30deg);
+          transform: rotate(30deg);
+}
+```
+

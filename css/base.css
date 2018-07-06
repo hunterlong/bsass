@@ -1,5 +1,12 @@
-.new_stuff {
-    width: 101010px;
+html, body, ul, ol {
+  margin: 0;
+  padding: 0;
+}
+
+.box {
+  -webkit-transform: rotate(30deg);
+      -ms-transform: rotate(30deg);
+          transform: rotate(30deg);
 }
 
 .container {
@@ -10,6 +17,13 @@
 .container .mobile {
     background-color: #000000;
     padding: -5rem;
+}
+
+.math {
+   padding-left: 700rem;
+   padding-right: 800rem;
+   padding-bottom: 7800rem;
+   padding-top: 156rem;
 }
 
 .divide {

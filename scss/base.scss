@@ -1,5 +1,10 @@
 @import 'variables'
 @import 'partial'
+@import 'mixins'
+
+.box {
+    @include transform(rotate(30deg));
+}
 
 .container {
     width: $container;
@@ -9,6 +14,13 @@
 .container .mobile {
     background-color: $container-color;
     padding: $container-padding - 10;
+}
+
+.math {
+   padding-left: $container - 80;
+   padding-right: $container + 20;
+   padding-bottom: $container * 10;
+   padding-top: $container / 5;
 }
 
 .divide {
