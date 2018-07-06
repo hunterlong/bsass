@@ -1,9 +1,14 @@
 @import 'variables'
 @import 'partial'
 @import 'mixins'
+@import 'extended'
 
 .box {
     @include transform(rotate(30deg));
+}
+
+.message {
+    @extend %message-shared;
 }
 
 .container {

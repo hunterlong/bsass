@@ -27,17 +27,19 @@ func saveFile(file, data string) {
 }
 
 var (
-	renderedCss []string
-	scssVars    map[string]string
-	muxinFuncs  map[string]string
-	baseCss     []string
-	compiledCss string
-	directory   string
+	renderedCss  []string
+	scssVars     map[string]string
+	muxinFuncs   map[string]string
+	extendsFuncs map[string]string
+	baseCss      []string
+	compiledCss  string
+	directory    string
 )
 
 func init() {
 	scssVars = make(map[string]string)
 	muxinFuncs = make(map[string]string)
+	extendsFuncs = make(map[string]string)
 	var err error
 	directory, err = filepath.Abs(filepath.Dir(os.Args[0]))
 	if err != nil {
@@ -75,6 +77,31 @@ func CollectMixin(i int, rows []string) int {
 
 }
 
+func ParseExtended(i int, rows []string) int {
+	var muxColl []string
+	var count int
+	for i := i; i <= len(rows)-1; i++ {
+
+		mix := rows[i]
+		//fmt.Println(mix)
+		muxColl = append(muxColl, mix)
+		count++
+	}
+
+	comp := strings.Join(muxColl, "\n")
+
+	re := regexp.MustCompile(`\%(.*)\;`)
+
+	extName := re.FindStringSubmatch(comp)
+
+	extendedName := extName[0][1 : len(extName[0])-1]
+
+	baseCss = append(baseCss, extendsFuncs[extendedName])
+
+	return count
+
+}
+
 func CollectVariables(file string) map[string]string {
 	location := fmt.Sprintf("%v.scss", file)
 	importedData := openFile(location)
@@ -82,6 +109,12 @@ func CollectVariables(file string) map[string]string {
 	for i := 0; i <= len(importedRows)-1; i++ {
 		obj := importedRows[i]
 		if len(obj) == 0 {
+			continue
+		}
+
+		if obj[:1] == "%" {
+			skip := CollectExtended(i, importedRows)
+			i += skip
 			continue
 		}
 
@@ -103,6 +136,34 @@ func CollectVariables(file string) map[string]string {
 	return scssVars
 }
 
+func CollectExtended(i int, rows []string) int {
+	var muxColl []string
+	var count int
+	for i := i; i <= len(rows)-1; i++ {
+
+		mix := rows[i]
+		//fmt.Println(mix)
+		muxColl = append(muxColl, mix)
+		count++
+	}
+
+	compiledMixin := strings.Join(muxColl, "\n")
+
+	//fmt.Println(compiledMixin)
+
+	re := regexp.MustCompile(`\%(.|\n)*\{`)
+	exName := re.FindStringSubmatch(compiledMixin)
+	extendName := exName[0][1 : len(exName[0])-2]
+
+	re = regexp.MustCompile(`\{(.|\n)*\}`)
+	mixStyle := re.FindStringSubmatch(compiledMixin)
+	mixCorrected := mixStyle[0][2 : len(mixStyle[0])-2]
+
+	extendsFuncs[extendName] = mixCorrected
+
+	return count
+}
+
 func ParseInclude(i int, rows []string) int {
 
 	var muxColl []string
@@ -121,18 +182,14 @@ func ParseInclude(i int, rows []string) int {
 	mixinFunc := re.FindStringSubmatch(compiledMixin)
 	mixName := mixinFunc[1]
 
-	fmt.Println("include found:", mixName)
-
 	re = regexp.MustCompile(`\(.*\)`)
 	params := re.FindStringSubmatch(compiledMixin)
 
-	fmt.Println(params[0])
-
 	//muxinFuncs[mixName] = compiledMixin
 
-	re = regexp.MustCompile(`/*(.*?)\{`)
-	class := re.FindStringSubmatch(compiledMixin)
-	fmt.Println(class)
+	//re = regexp.MustCompile(`/*(.*?)\{`)
+	//class := re.FindStringSubmatch(compiledMixin)
+	//fmt.Println(class)
 	muxRender := RenderMixin(muxinFuncs[mixName], params[0])
 
 	baseCss = append(baseCss, muxRender)
@@ -175,6 +232,7 @@ func main() {
 
 		imports := strings.Contains(v, "@import")
 		includes := strings.Contains(v, "@include")
+		extends := strings.Contains(v, "@extend")
 
 		if imports {
 
@@ -185,7 +243,10 @@ func main() {
 		} else if includes {
 
 			ParseInclude(k, baseLines)
-			//baseCss = append(baseCss, "FUNCTION: "+v)
+
+		} else if extends {
+
+			ParseExtended(k, baseLines)
 
 		} else {
 

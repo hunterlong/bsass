@@ -9,6 +9,12 @@ html, body, ul, ol {
           transform: rotate(30deg);
 }
 
+.message {
+  border: 1px solid #ccc;
+  padding: 10px;
+  color: #333;
+}
+
 .container {
     width: 780rem;
     padding: 5rem;

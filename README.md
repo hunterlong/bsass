@@ -89,3 +89,24 @@ html, body, ul, ol {
 }
 ```
 
+## Extends
+```scss
+%message-shared {
+  border: 1px solid #ccc;
+  padding: 10px;
+  color: #333;
+}
+```
+```scss
+.message {
+    @extend %message-shared;
+}
+```
+```css
+.message {
+  border: 1px solid #ccc;
+  padding: 10px;
+  color: #333;
+}
+```
+
