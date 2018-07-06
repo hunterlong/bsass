@@ -4,13 +4,13 @@ APP="bsass"
 REPO="hunterlong/bsass"
 
 # BUILD bsass GOLANG BINS
-#mkdir build
-#xgo -go 1.10.x --targets=darwin/* --dest=build -ldflags="-X main.VERSION=$VERSION" ./
-#xgo -go 1.10.x --targets=linux/* --dest=build -ldflags="-X main.VERSION=$VERSION" ./
-#xgo -go 1.10.x --targets=ios/* --dest=build -ldflags="-X main.VERSION=$VERSION" ./
-#xgo -go 1.10.x --targets=android/* --dest=build -ldflags="-X main.VERSION=$VERSION" ./
-#xgo -go 1.10.x --targets=windows-6.0/* --dest=build -ldflags="-X main.VERSION=$VERSION" ./
-#xgo -go 1.10.x --targets=linux/amd64 --dest=build -ldflags="-X main.VERSION=$VERSION -linkmode external -extldflags -static" -out alpine ./
+mkdir build
+xgo -go 1.10.x --targets=darwin/* --dest=build -ldflags="-X main.VERSION=$VERSION" ./
+xgo -go 1.10.x --targets=linux/* --dest=build -ldflags="-X main.VERSION=$VERSION" ./
+xgo -go 1.10.x --targets=ios/* --dest=build -ldflags="-X main.VERSION=$VERSION" ./
+xgo -go 1.10.x --targets=android/* --dest=build -ldflags="-X main.VERSION=$VERSION" ./
+xgo -go 1.10.x --targets=windows-6.0/* --dest=build -ldflags="-X main.VERSION=$VERSION" ./
+xgo -go 1.10.x --targets=linux/amd64 --dest=build -ldflags="-X main.VERSION=$VERSION -linkmode external -extldflags -static" -out alpine ./
 
 cd build
 ls
