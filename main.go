@@ -33,6 +33,14 @@ func init() {
 }
 
 func main() {
+	if len(os.Args) == 2 {
+		method := os.Args[1]
+		if method == "version" {
+			fmt.Printf("bsass v%v\n", VERSION)
+		}
+		os.Exit(0)
+	}
+
 	if len(os.Args) < 3 {
 		fmt.Printf("Not enough parameters!\n")
 		os.Exit(2)
