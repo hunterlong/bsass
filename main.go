@@ -9,6 +9,7 @@ import (
 )
 
 var (
+	VERSION string
 	scssVars     map[string]string
 	muxinFuncs   map[string]string
 	muxinParams  map[string][]string

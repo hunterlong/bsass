@@ -5,12 +5,15 @@
 # Why bsass is bsass
 bsass was created to be a micro scss compiler without any requirements, all you need is the precompiled binary for your operating system.
 
-
 # No Requirements
 Unlike other sass compilers, bsass has 0 requirements. Download the latest release for your operating system and your good to go.
 
 ## Commands
+```bash
+bsass version
+//bsass v1.34
 ```
+```bash
 bsass scss/base.scss css/base.css
 ```
 ##### loads `base.scss` and exports a compiled css to `base.css`
@@ -34,6 +37,9 @@ $container-padding: 5rem;
 ```
 
 ## Math
+```scss
+$container: 780rem;
+```
 ```scss
 .math {
    padding-left: $container - 80;
