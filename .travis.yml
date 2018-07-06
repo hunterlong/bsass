@@ -1,0 +1,65 @@
+os:
+  - linux
+
+language: go
+
+go:
+  - "1.10.x"
+
+install: true
+
+sudo: required
+
+services:
+  - docker
+
+env:
+  global:
+     - VERSION=0.1
+
+matrix:
+  allow_failures:
+    - go: master
+  fast_finish: true
+
+before_deploy:
+  - git config --local user.name "hunterlong"
+  - git config --local user.email "info@socialeck.com"
+  - git tag "v$VERSION" --force
+deploy:
+  - provider: releases
+    api_key: $GH_TOKEN
+    file:
+      - "build/bsass-android-16-aar.tar.gz"
+      - "build/bsass-android-16-arm.tar.gz"
+      - "build/bsass-android-16-x32.tar.gz"
+      - "build/bsass-ios-5.0-framework.tar.gz"
+      - "build/bsass-ios-arm64.tar.gz"
+      - "build/bsass-ios-arm7.tar.gz"
+      - "build/bsass-linux-alpine.tar.gz"
+      - "build/bsass-linux-arm5.tar.gz"
+      - "build/bsass-linux-arm6.tar.gz"
+      - "build/bsass-linux-arm64.tar.gz"
+      - "build/bsass-linux-arm7.tar.gz"
+      - "build/bsass-linux-mips-x64.tar.gz"
+      - "build/bsass-linux-mips-x64le.tar.gz"
+      - "build/bsass-linux-mips.tar.gz"
+      - "build/bsass-linux-mipsle.tar.gz"
+      - "build/bsass-linux-x32.tar.gz"
+      - "build/bsass-linux-x64.tar.gz"
+      - "build/bsass-osx-x32.tar.gz"
+      - "build/bsass-osx-x64.tar.gz"
+      - "build/bsass-windows-x32.zip"
+      - "build/bsass-windows-x64.zip"
+    skip_cleanup: true
+
+notifications:
+  email: false
+
+before_script:
+  - go get github.com/karalabe/xgo
+  - go get
+
+script:
+  - if [[ "$TRAVIS_BRANCH" == "master" ]]; then travis_wait 30 docker pull karalabe/xgo-latest; fi
+  - if [[ "$TRAVIS_BRANCH" == "master" ]]; then /bin/bash -c .travis/build.sh; fi
