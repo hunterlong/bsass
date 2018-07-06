@@ -48,6 +48,13 @@ func CollectVariables(file string) map[string]string {
 	importedData := openFile(location)
 	importedRows := strings.Split(string(importedData), "\n")
 	for _, i := range importedRows {
+		if len(i) < 1 {
+			continue
+		}
+		if i[:1] != "$" {
+			baseCss = append(baseCss, i)
+			continue
+		}
 		varPass := strings.Split(i, ": ")
 		scssVars[varPass[0]] = varPass[1][0 : len(varPass[1])-1]
 	}
@@ -127,6 +134,10 @@ func main() {
 func TrueValue(s string) (int, string) {
 
 	s = strings.TrimSpace(s)
+
+	if len(s) < 2 {
+		return 2, s
+	}
 
 	if s[len(s)-1:] == ";" {
 		s = s[:len(s)-1]

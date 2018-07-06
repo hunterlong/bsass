@@ -1,5 +1,5 @@
 @import 'variables'
-@import 'awesome'
+@import 'partial'
 
 .container {
     width: $container;
@@ -11,15 +11,19 @@
     padding: $container-padding - 10;
 }
 
-.half {
-   padding: $container / 2;
+.divide {
+   padding: $container / 5;
 }
 
-.added {
-   padding: $container + 10;
+.subtract {
+   padding: $container - 80;
 }
 
-.multiplied {
+.addition {
+   padding: $container + 20;
+}
+
+.multiply {
    padding: $container * 10;
 }
 

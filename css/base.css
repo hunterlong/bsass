@@ -1,3 +1,6 @@
+.new_stuff {
+    width: 101010px;
+}
 
 .container {
     width: 780rem;
@@ -9,15 +12,19 @@
     padding: -5rem;
 }
 
-.half {
-   padding: 390rem;
+.divide {
+   padding: 156rem;
 }
 
-.added {
-   padding: 790rem;
+.subtract {
+   padding: 700rem;
 }
 
-.multiplied {
+.addition {
+   padding: 800rem;
+}
+
+.multiply {
    padding: 7800rem;
 }
 
