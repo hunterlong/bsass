@@ -23,7 +23,7 @@ func runCLI() error {
 }
 
 func main() {
-	if len(os.Args) > 1 {
+	if len(os.Args) == 1 {
 		err := runCLI()
 		if err != nil {
 			fmt.Println(err)
