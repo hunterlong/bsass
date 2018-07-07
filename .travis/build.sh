@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 APP="bsass"
+SUBAPP="cli"
 REPO="hunterlong/bsass"
 
 # BUILD bsass GOLANG BINS
@@ -18,50 +19,50 @@ ls
 mv alpine-linux-amd64 $APP
 tar -czvf $APP-linux-alpine.tar.gz $APP && rm -f $APP
 
-mv $APP-darwin-10.6-amd64 $APP
+mv $SUBAPP-darwin-10.6-amd64 $APP
 tar -czvf $APP-osx-x64.tar.gz $APP && rm -f $APP
 
-mv $APP-darwin-10.6-386 $APP
+mv $SUBAPP-darwin-10.6-386 $APP
 tar -czvf $APP-osx-x32.tar.gz $APP && rm -f $APP
 
-mv $APP-linux-amd64 $APP
+mv $SUBAPP-linux-amd64 $APP
 tar -czvf $APP-linux-x64.tar.gz $APP && rm -f $APP
 
-mv $APP-linux-386 $APP
+mv $SUBAPP-linux-386 $APP
 tar -czvf $APP-linux-x32.tar.gz $APP && rm -f $APP
 
-mv $APP-windows-6.0-amd64.exe $APP.exe
+mv $SUBAPP-windows-6.0-amd64.exe $APP.exe
 zip $APP-windows-x64.zip $APP.exe  && rm -f $APP.exe
 
-mv $APP-windows-6.0-386.exe $APP.exe
+mv $SUBAPP-windows-6.0-386.exe $APP.exe
 zip $APP-windows-x32.zip $APP.exe  && rm -f $APP.exe
 
-mv $APP-linux-arm-7 $APP
+mv $SUBAPP-linux-arm-7 $APP
 tar -czvf $APP-linux-arm7.tar.gz $APP && rm -f $APP
 
-mv $APP-linux-arm-6 $APP
+mv $SUBAPP-linux-arm-6 $APP
 tar -czvf $APP-linux-arm6.tar.gz $APP && rm -f $APP
 
-mv $APP-linux-arm-5 $APP
+mv $SUBAPP-linux-arm-5 $APP
 tar -czvf $APP-linux-arm5.tar.gz $APP && rm -f $APP
 
-mv $APP-linux-arm64 $APP
+mv $SUBAPP-linux-arm64 $APP
 tar -czvf $APP-linux-arm64.tar.gz $APP && rm -f $APP
 
-mv $APP-ios-5.0-armv7 $APP
+mv $SUBAPP-ios-5.0-armv7 $APP
 tar -czvf $APP-ios-arm7.tar.gz $APP && rm -f $APP
 
-mv $APP-android-16-arm $APP
+mv $SUBAPP-android-16-arm $APP
 tar -czvf $APP-android-16-arm.tar.gz $APP && rm -f $APP
 
-mv $APP-linux-mips $APP
+mv $SUBAPP-linux-mips $APP
 tar -czvf $APP-linux-mips.tar.gz $APP && rm -f $APP
 
-mv $APP-linux-mips64 $APP
+mv $SUBAPP-linux-mips64 $APP
 tar -czvf $APP-linux-mips-x64.tar.gz $APP && rm -f $APP
 
-mv $APP-linux-mips64le $APP
+mv $SUBAPP-linux-mips64le $APP
 tar -czvf $APP-linux-mips-x64le.tar.gz $APP && rm -f $APP
 
-mv $APP-linux-mipsle $APP
+mv $SUBAPP-linux-mipsle $APP
 tar -czvf $APP-linux-mipsle.tar.gz $APP && rm -f $APP
