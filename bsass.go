@@ -1,4 +1,4 @@
-package main
+package bsass
 
 import (
 	"fmt"
@@ -20,9 +20,9 @@ var (
 	mixinParams    map[string][]string
 	extends        map[string]string
 
-	recompiledCss []string
+	RecompiledCss []string
 	directory     string
-	pathJoin      string
+	PathJoin      string
 
 	onLine  int
 	onFile  string
@@ -30,6 +30,9 @@ var (
 )
 
 func init() {
+	if VERSION == "" {
+		VERSION = "0.13"
+	}
 	scssVars = make(map[string]string)
 	imports = make(map[string]string)
 	includes = make(map[string]string)
@@ -45,27 +48,23 @@ func init() {
 	}
 }
 
-func ScanAllExtends(contents string) {
+func ScanAllExtends(contents string) map[string]string {
 	baseLines := strings.Split(contents, "\n")
-
+	var out map[string]string
 	for _, v := range baseLines {
 		extendName := regexSingle(`\%(.*?) \{`, v)
 		if extendName == "" {
 			continue
 		}
-
 		extendSprint := fmt.Sprintf(`%v {([^}]*)}`, extendName)
 		fullExtend := regexSingle(extendSprint, contents)
-
 		extends[extendName] = fullExtend[1 : len(fullExtend)-1]
-
 		fmt.Printf("    EXTEND:%v\n", extendName)
-
 	}
-
+	return out
 }
 
-func ScanAll(filename string) {
+func ScanAll(filename string) string {
 	scssFile, err := ioutil.ReadFile(filename)
 	if err != nil {
 		panic(err)
@@ -84,6 +83,7 @@ func ScanAll(filename string) {
 
 	fmt.Println("Beginning replacement process now...")
 
+	return scssData
 }
 
 func SassReplacement(filename string) {
@@ -105,7 +105,7 @@ func SassReplacement(filename string) {
 		// search for @import in line
 		importName := regexSingle(`\@import '(.*?)'\;`, v)
 		if importName != "" {
-			recompiledCss = append(recompiledCss, ReplaceImport(importName))
+			RecompiledCss = append(RecompiledCss, ReplaceImport(importName))
 			continue
 		}
 
@@ -116,7 +116,7 @@ func SassReplacement(filename string) {
 			mixParams := regexSingle(`\((.*?)\)`, included)
 			params := strings.Split(mixParams, ",")
 			mixData := ReplaceMixins(mixName, params)
-			recompiledCss = append(recompiledCss, mixData)
+			RecompiledCss = append(RecompiledCss, mixData)
 			continue
 		}
 
@@ -124,10 +124,11 @@ func SassReplacement(filename string) {
 		extended := regexSingle(`\@extend %(.*?)[;|\s]`, v)
 		if extended != "" {
 			extendData := extends[extended]
-			recompiledCss = append(recompiledCss, extendData)
+			RecompiledCss = append(RecompiledCss, extendData)
 			continue
 		}
 
+		//search for functions like 'darken'
 		function := regexSingle(`\:(.*?)\(\$`, removeSpaces(v))
 		if len(function) != 0 {
 			switch function {
@@ -138,7 +139,15 @@ func SassReplacement(filename string) {
 				color := darken(scssVars[splitParams[0]], FloatInString(splitParams[1]))
 				cssEntry := strings.Split(v, ":")
 				out := fmt.Sprintf("%v: %v;", cssEntry[0], color)
-				recompiledCss = append(recompiledCss, out)
+				RecompiledCss = append(RecompiledCss, out)
+				continue
+			case "lighten":
+				funcParams := regexSingle(`\$(.*?)\)`, removeSpaces(v))
+				splitParams := strings.Split(funcParams, ",")
+				color := lighten(scssVars[splitParams[0]], FloatInString(splitParams[1]))
+				cssEntry := strings.Split(v, ":")
+				out := fmt.Sprintf("%v: %v;", cssEntry[0], color)
+				RecompiledCss = append(RecompiledCss, out)
 				continue
 			}
 
@@ -173,11 +182,11 @@ func SassReplacement(filename string) {
 				stringLine = fmt.Sprintf("%v: %v%v;", cssEntry[0], result, varType)
 			}
 
-			recompiledCss = append(recompiledCss, stringLine)
+			RecompiledCss = append(RecompiledCss, stringLine)
 			continue
 		}
 
-		recompiledCss = append(recompiledCss, v)
+		RecompiledCss = append(RecompiledCss, v)
 	}
 
 }
@@ -185,37 +194,4 @@ func SassReplacement(filename string) {
 func ThrowError(err error) {
 	fmt.Printf("\nError in '%v', line #%v, %v\nIssue: %v\n", onFile, onLine+1, err, errLine)
 	os.Exit(2)
-}
-
-func main() {
-	if len(os.Args) == 2 {
-		method := os.Args[1]
-		if method == "version" {
-			fmt.Printf("bsass v%v\n", VERSION)
-		}
-		os.Exit(0)
-	}
-
-	if len(os.Args) < 3 {
-		fmt.Printf("Not enough parameters!\n")
-		os.Exit(2)
-	}
-
-	scss := os.Args[1]
-	css := os.Args[2]
-
-	fmt.Printf("Using %v and exporting to %v\n", scss, css)
-	pathDir := strings.Split(scss, "/")
-	pathJoin = strings.Join(pathDir[:len(pathDir)-1], "/")
-
-	fmt.Printf("Scanning file %v...\n", scss)
-
-	ScanAll(scss)
-
-	SassReplacement(scss)
-
-	saveFile(css, strings.Join(recompiledCss, "\n"))
-
-	fmt.Printf("Saved rendered CSS file to: %v\n", css)
-
 }

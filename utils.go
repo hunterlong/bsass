@@ -1,4 +1,4 @@
-package main
+package bsass
 
 import (
 	"fmt"
@@ -50,7 +50,7 @@ func skipLines(start int, data []string) int {
 	return 0
 }
 
-func saveFile(file, data string) {
+func SaveFile(file, data string) {
 	err := ioutil.WriteFile(file, []byte(data), 0644) // For read access.
 	if err != nil {
 		panic(err)

@@ -20,8 +20,20 @@
   background-color: darken($box-color, 30%);
 }
 
-.divide_hald {
+.lighten_me {
+  background-color: lighten($box-color, 80%);
+}
+
+.divide_plus {
   padding: $container / 4 + 8;
+}
+
+.divide_multi {
+  padding: $container / 4 * 10;
+}
+
+.divide_multi {
+  padding: $container / 4 * 10 + ((420 * 50) / 4 );
 }
 
 .message {
@@ -30,6 +42,7 @@
 
 .message2 {
     @extend %awesome-design;
+  width: 420px;
 }
 
 .container {

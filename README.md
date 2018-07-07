@@ -1,7 +1,6 @@
 # bsass (Basically SASS)
 `bsass` is a simple application that will render SCSS files into precompile CSS files.
 
-
 # Why bsass is bsass
 bsass was created to be a micro scss compiler without any requirements, all you need is the precompiled binary for your operating system.
 
@@ -19,6 +18,7 @@ bsass scss/base.scss css/base.css
 ##### loads `base.scss` and exports a compiled css to `base.css`
 
 ## Variables
+Variable's are just like normal `$foobar: 12px;`.
 ```scss
 $container: 780rem;
 $container-padding: 5rem;
@@ -37,6 +37,7 @@ $container-padding: 5rem;
 ```
 
 ## Math
+You can do math, and more complex math of other objects
 ```scss
 $container: 780rem;
 ```
@@ -47,6 +48,9 @@ $container: 780rem;
    padding-bottom: $container * 10;
    padding-top: $container / 5;
 }
+.divide_multi {
+  padding: $container / 4 * 10 + ((420 * 50) / 4 );
+}
 ```
 ```css
 .math {
@@ -55,9 +59,13 @@ $container: 780rem;
    padding-bottom: 7800rem;
    padding-top: 156rem;
 }
+.divide_multi {
+  padding: 7200rem;
+}
 ```
 
 ## Importing
+Just like normal, but you can include an http file.
 ```scss
 @import 'reset'
 @import 'variables'
@@ -87,7 +95,9 @@ html, body, ul, ol {
     padding: 5rem;
 }
 ```
+
 ## Functions
+Function can be useful, there's a couple.
 ```scss
 $box-color: #5cd338;
 ```
@@ -95,14 +105,21 @@ $box-color: #5cd338;
 .darken_me {
   background-color: darken($box-color, 30%);
 }
+.lighten_me {
+  background-color: lighten($box-color, 80%);
+}
 ```
 ```css
 .darken_me {
   background-color: #1c3f11
 }
+.lighten_me {
+  background-color: #4aa92d;
+}
 ```
 
 ## Mixins
+Mix it up and do it like you normally would with sass.
 ```scss
 @mixin transform($property) {
   -webkit-transform: $property;
@@ -124,6 +141,7 @@ $box-color: #5cd338;
 ```
 
 ## Extends
+Make's your CSS easier to handle for the future.
 ```scss
 %message-shared {
   border: 1px solid #ccc;
@@ -143,4 +161,6 @@ $box-color: #5cd338;
   color: #333;
 }
 ```
+
+
 

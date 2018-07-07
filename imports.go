@@ -1,4 +1,4 @@
-package main
+package bsass
 
 import (
 	"fmt"
@@ -26,7 +26,7 @@ func ScanAllImports(contents string) {
 				continue
 			}
 
-			scanFile := fmt.Sprintf("%v/%v.scss", pathJoin, importFile)
+			scanFile := fmt.Sprintf("%v/%v.scss", PathJoin, importFile)
 
 			fileContents, err := ioutil.ReadFile(scanFile)
 			if err != nil {

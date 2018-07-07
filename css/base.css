@@ -27,8 +27,17 @@ html, body, ul, ol {
 .darken_me {
   background-color: #1c3f11;
 }
-.divide_hald {
+.lighten_me {
+  background-color: #4aa92d;
+}
+.divide_plus {
   padding: 203rem;
+}
+.divide_multi {
+  padding: 1950rem;
+}
+.divide_multi {
+  padding: 7200rem;
 }
 .message {
   border: 1px solid #ccc;
@@ -37,6 +46,7 @@ html, body, ul, ol {
 }
 .message2 {
   color: #333;
+  width: 420px;
 }
 .container {
     width: 780rem;
