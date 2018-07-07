@@ -3,6 +3,7 @@ package bsass
 import (
 	"fmt"
 	"github.com/Knetic/govaluate"
+	"github.com/fatih/color"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -42,7 +43,7 @@ func init() {
 	var err error
 	directory, err = filepath.Abs(filepath.Dir(os.Args[0]))
 	if err != nil {
-		panic(err)
+		ThrowError(err)
 	}
 }
 
@@ -57,7 +58,7 @@ func ScanAllExtends(contents string) map[string]string {
 		extendSprint := fmt.Sprintf(`%v {([^}]*)}`, extendName)
 		fullExtend := regexSingle(extendSprint, contents)
 		extends[extendName] = fullExtend[1 : len(fullExtend)-1]
-		fmt.Printf("    EXTEND:%v\n", extendName)
+		//fmt.Printf("    EXTEND:%v\n", extendName)
 	}
 	return out
 }
@@ -65,7 +66,7 @@ func ScanAllExtends(contents string) map[string]string {
 func ScanAll(filename string) string {
 	scssFile, err := ioutil.ReadFile(filename)
 	if err != nil {
-		panic(err)
+		ThrowError(err)
 	}
 	scssData := string(scssFile)
 
@@ -77,9 +78,9 @@ func ScanAll(filename string) string {
 
 	ScanAllExtends(scssData)
 
-	fmt.Printf("Scan Complete. %v vars | %v mixins | %v extends\n", len(scssVars), len(mixins), len(extends))
+	Log("Scan Complete. %v vars | %v mixins | %v extends\n", len(scssVars), len(mixins), len(extends))
 
-	fmt.Println("Beginning replacement process now...")
+	Log("Beginning replacement process now...")
 
 	return scssData
 }
@@ -97,6 +98,10 @@ func SassReplacement(filename string) {
 		onLine = k
 		errLine = v
 		if len(v) == 0 {
+			continue
+		}
+
+		if strings.Contains(v, "//") {
 			continue
 		}
 
@@ -157,6 +162,13 @@ func SassReplacement(filename string) {
 			stringLine := v
 
 			for _, va := range variable {
+				if va[len(va)-1:] == "," {
+					continue
+				}
+				if scssVars[va] == "" {
+					err := fmt.Sprintf("missing variable %v %v %v\n", va, errLine, onLine)
+					ThrowError(err)
+				}
 				stringLine = strings.Replace(stringLine, "$"+va, scssVars[va], 1)
 			}
 
@@ -189,7 +201,24 @@ func SassReplacement(filename string) {
 
 }
 
-func ThrowError(err error) {
-	fmt.Printf("\nError in '%v', line #%v, %v\nIssue: %v\n", onFile, onLine+1, err, errLine)
+func ShowHeader() {
+	c := color.New(color.FgCyan)
+	c.Println(" _                       ")
+	c.Println("| |__  ___  __ _ ___ ___ ")
+	c.Println("| '_ \\/ __|/ _` / __/ __|")
+	c.Println("| |_) \\__ \\ (_| \\__ \\__ \\    💁")
+	c.Printf("|_.__/|___/\\__,_|___/___/  v%v\n", VERSION)
+	c.Println("  It's basically sass...")
+}
+
+func Log(msg string, data ...interface{}) {
+	c := color.New(color.FgHiGreen)
+	c.Printf(msg, data...)
+}
+
+func ThrowError(err interface{}) {
+	c := color.New(color.FgHiRed)
+	msg := fmt.Sprintf("\n  Line #%v %v\n  Issue: %v\n", onLine+1, onFile, err)
+	c.Printf(msg)
 	os.Exit(2)
 }

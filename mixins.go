@@ -28,7 +28,7 @@ func ScanAllMixins(contents string) {
 		mixins[mixinName] = fullMixin[1 : len(fullMixin)-1]
 		mixinParams[mixinName] = paramSplit
 
-		fmt.Printf("    MIXIN:%v=%v\n", mixinName, paramSplit)
+		//fmt.Printf("    MIXIN:%v=%v\n", mixinName, paramSplit)
 
 	}
 

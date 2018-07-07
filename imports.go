@@ -35,13 +35,13 @@ func ScanAllImports(contents string) {
 
 			imports[importFile] = string(fileContents)
 
-			fmt.Printf("Scanning $variable in %v...\n", scanFile)
+			Log("Scanning $variable in %v...\n", scanFile)
 			ScanAllVars(string(fileContents))
 
-			fmt.Printf("Scanning @mixin in %v...\n", scanFile)
+			Log("Scanning @mixin in %v...\n", scanFile)
 			ScanAllMixins(string(fileContents))
 
-			fmt.Printf("Scanning &extends in %v...\n", scanFile)
+			Log("Scanning &extends in %v...\n", scanFile)
 			ScanAllExtends(string(fileContents))
 
 		}

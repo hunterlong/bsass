@@ -5,12 +5,6 @@ html, body, ul, ol {
 
 
 
-.remote_location {
-    color: #bababa;
-}
-.awesome_test {
-    background-color: orange;
-}
 .box {
   -webkit-transform: rotate(30deg);
       -ms-transform: rotate(30deg);
@@ -29,6 +23,12 @@ html, body, ul, ol {
 }
 .lighten_me {
   background-color: #4aa92d;
+}
+.test_colorize {
+  background-color: 5338cd;
+  border: -29pxsoliddarken;
+}
+.missing_vars {
 }
 .divide_plus {
   padding: 203rem;
@@ -53,7 +53,7 @@ html, body, ul, ol {
     padding: 5rem;
 }
 .container .mobile {
-    background-color: 0;
+    background-color: 5338cd;
     padding: -5rem;
 }
 .math {
@@ -76,10 +76,6 @@ html, body, ul, ol {
 }
 .test {
     color: #000000;
-}
-.test2 {
-    color: #73ff6e;
-    color: #3a8037;
 }
 .new-div {
    color: #000000;

@@ -30,16 +30,16 @@ func main() {
 			os.Exit(2)
 		}
 	}
-
+	bsass.ShowHeader()
 	scss := os.Args[1]
 	css := os.Args[2]
 
-	fmt.Printf("Using %v and exporting to %v\n", scss, css)
+	bsass.Log("Using %v and exporting to %v\n", scss, css)
 
 	pathDir := strings.Split(scss, "/")
 	bsass.PathJoin = strings.Join(pathDir[:len(pathDir)-1], "/")
 
-	fmt.Printf("Scanning file %v...\n", scss)
+	bsass.Log("Scanning file %v...\n", scss)
 
 	bsass.ScanAll(scss)
 
@@ -47,6 +47,6 @@ func main() {
 
 	bsass.SaveFile(css, strings.Join(bsass.RecompiledCss, "\n"))
 
-	fmt.Printf("Saved rendered CSS file to: %v\n", css)
+	bsass.Log("Saved rendered CSS file to: %v\n", css)
 
 }

@@ -1,7 +1,6 @@
 package bsass
 
 import (
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"regexp"
@@ -53,7 +52,7 @@ func skipLines(start int, data []string) int {
 func SaveFile(file, data string) {
 	err := ioutil.WriteFile(file, []byte(data), 0644) // For read access.
 	if err != nil {
-		panic(err)
+		ThrowError(err)
 	}
 }
 
@@ -69,8 +68,7 @@ func removeSpaces(str string) string {
 func openFile(file string) string {
 	scssFile, err := ioutil.ReadFile(file)
 	if err != nil {
-		fmt.Printf("Cannot open file: %v\n", file)
-		panic(err)
+		ThrowError(err)
 	}
 	return string(scssFile)
 }
@@ -83,17 +81,14 @@ func StringInt(a string) int {
 func DownloadRemote(file string) string {
 	response, err := http.Get(file)
 	if err != nil {
-		fmt.Printf("%s", err)
-		return ""
+		ThrowError(err)
 	} else {
 		defer response.Body.Close()
 		contents, err := ioutil.ReadAll(response.Body)
 		if err != nil {
-			fmt.Printf("%s", err)
-			return ""
+			ThrowError(err)
 		}
 		return string(contents)
 	}
-
 	return ""
 }

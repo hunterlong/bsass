@@ -24,6 +24,15 @@
   background-color: lighten($box-color, 80%);
 }
 
+.test_colorize {
+  background-color: $box-color;
+  border: 1px solid darken($box-color, 30%);
+}
+
+.missing_vars {
+  //width: $container-is-not-a-lie;
+}
+
 .divide_plus {
   padding: $container / 4 + 8;
 }
@@ -41,7 +50,7 @@
 }
 
 .message2 {
-    @extend %awesome-design;
+  @extend %awesome-design;
   width: 420px;
 }
 
@@ -51,7 +60,7 @@
 }
 
 .container .mobile {
-    background-color: $container-color;
+    background-color: $box-color;
     padding: $container-padding - 10;
 }
 
@@ -80,10 +89,6 @@
 
 .test {
     color: $container-color;
-}
-.test2 {
-    color: #73ff6e;
-    color: #3a8037;
 }
 
 .new-div {

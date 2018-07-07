@@ -1,7 +1,6 @@
 package bsass
 
 import (
-	"fmt"
 	"regexp"
 	"strings"
 )
@@ -29,7 +28,7 @@ func ScanAllVars(contents string) {
 
 		scssVars[varName] = varValue
 
-		fmt.Printf("    VAR:%v=%v\n", varName, scssVars[varName])
+		//fmt.Printf("    VAR:%v=%v\n", varName, scssVars[varName])
 
 	}
 
