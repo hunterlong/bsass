@@ -7,19 +7,83 @@
     <title>bsass - it's basically sass</title>
     <meta name="description" content="bsass can compile sass/scss files into css on any operating system with zero requirements.">
     <meta name="author" content="Hunter Long">
-
-    <div class="container">
-        <img class="logo" src="https://img.cjx.io/bsasslogo.png">
-
-        <p>Glad you made it,</p>
-    </div>
-
-
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <!--[if lt IE 9]>
     <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
 </head>
-
 <body>
+
+<div class="container">
+    <img class="logo" alt="bsass - sass compiler" src="https://img.cjx.io/bsasslogo.png">
+
+    <p>bsass <span id="version">0.0</span> Glad you made it, click on one of the button below to download <b>bsass</b></p>
+
+    <p>
+        <a class="btn btn-outline-secondary" id="mac_download" href="#"><i class="fa fa-apple" aria-hidden="true"></i> Mac</a>
+        <a class="btn btn-outline-secondary" id="win_download" href="#"><i class="fa fa-windows" aria-hidden="true"></i> Windows</a>
+        <a class="btn btn-outline-secondary" id="linux_download" href="#"><i class="fa fa-linux" aria-hidden="true"></i> Linux</a>
+        <a class="btn btn-outline-secondary" href="https://github.com/hunterlong/bsass"><i class="fa fa-github" aria-hidden="true"></i> Github</a>
+    </p>
+
+    <p>
+        <a href="" id="win32">Windows x32</a> | <a href="" id="linux32">Linux x32</a> | <a href="" id="linuxalpine">Alpine</a> | <a href="" id="arm7">arm7</a>
+    </p>
+
+    <div class="col-12">
+
+
+
+    </div>
+
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<script language="javascript" type="text/javascript">
+
+    $(document).ready(function () {
+        GetLatestReleaseInfo();
+    });
+
+    function GetLatestReleaseInfo() {
+        $.getJSON("https://api.github.com/repos/hunterlong/bsass/releases/latest").done(function (json) {
+            $("#version").html(json.tag_name);
+            var mac;
+            var win;
+            var win32;
+            var linux;
+            var linux32;
+            var linuxalpine;
+            var arm7;
+            $.each(json.assets, function(k, v) {
+                if (v.name=="bsass-osx-x64.tar.gz"){
+                    mac = v.browser_download_url;
+                } else if (v.name=="bsass-windows-x64.zip"){
+                    win = v.browser_download_url;
+                } else if (v.name=="bsass-windows-x32.zip"){
+                    win32 = v.browser_download_url;
+                } else if  (v.name=="bsass-linux-x64.tar.gz") {
+                    linux = v.browser_download_url;
+                } else if  (v.name=="bsass-linux-x32.tar.gz") {
+                    linux32 = v.browser_download_url;
+                } else if  (v.name=="bsass-linux-alpine.tar.gz") {
+                    linuxalpine = v.browser_download_url;
+                } else if  (v.name=="bsass-linux-arm7.tar.gz") {
+                    arm7 = v.browser_download_url;
+                }
+            });
+            $("#win_download").attr("href", win);
+            $("#mac_download").attr("href", mac);
+            $("#linux_download").attr("href", linux);
+            $("#linux32").attr("href", linux32);
+            $("#linuxalpine").attr("href", linuxalpine);
+            $("#arm7").attr("href", arm7);
+            $("#win32").attr("href", win32);
+        });
+    }
+</script>
+
 </body>
 </html>

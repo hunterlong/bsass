@@ -19,12 +19,12 @@ var (
 	mixins         map[string]string
 	mixinParams    map[string][]string
 	extends        map[string]string
-	RecompiledCss []string
-	directory     string
-	PathJoin      string
-	onLine  int
-	onFile  string
-	errLine string
+	RecompiledCss  []string
+	directory      string
+	PathJoin       string
+	onLine         int
+	onFile         string
+	errLine        string
 )
 
 func init() {

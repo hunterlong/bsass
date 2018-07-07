@@ -23,4 +23,4 @@ printf "Downloading latest version URL: $FILE\n"
 curl -L -sS $FILE -o bsass.tar.gz && tar xzf bsass.tar.gz && rm bsass.tar.gz
 chmod +x bsass
 mv bsass /usr/local/bin/
-printf "bsass $VERSION has been successfully installed in /usr/local/bin/bsass\nTry 'bsass version' to check it!"
+printf "bsass $VERSION has been successfully installed in /usr/local/bin/bsass\nTry 'bsass version' to check it!\n"
