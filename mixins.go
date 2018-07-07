@@ -1,44 +1,47 @@
 package main
 
 import (
-	"regexp"
+	"fmt"
 	"strings"
 )
 
-func RenderMixin(mix, vars string) string {
-	re := regexp.MustCompile(`\{(.|\n)*\}`)
-	mixStyle := re.FindStringSubmatch(mix)
-	mixCorrected := mixStyle[0][2 : len(mixStyle[0])-2]
-	out := strings.Replace(mixCorrected, "$property", vars[1:len(vars)-1], 4)
-	return out
-}
+func ScanAllMixins(contents string) {
+	baseLines := strings.Split(contents, "\n")
 
-func CollectMixin(i int, rows []string) int {
-	var muxColl []string
-	var count int
-	for i := i; i <= len(rows)-1; i++ {
-		mix := rows[i]
-		muxColl = append(muxColl, mix)
-		count++
-		if strings.Contains(mix, "}") {
-			break
+	for _, v := range baseLines {
+		mixinName := regexSingle(`\@mixin (.*?)\(`, v)
+		if mixinName == "" {
+			continue
 		}
+
+		funcReg := fmt.Sprintf(`%v\((.*?)\)`, mixinName)
+
+		params := regexSingle(funcReg, v)
+
+		paramSplit := strings.Split(params, ",")
+
+		escapedParams := strings.Replace(params, "$", "\\$", 4)
+
+		mixinSprint := fmt.Sprintf(`%v\(%v\) {([^}]*)}`, mixinName, escapedParams)
+		fullMixin := regexSingle(mixinSprint, contents)
+
+		mixins[mixinName] = fullMixin[1 : len(fullMixin)-1]
+		mixinParams[mixinName] = paramSplit
+
+		fmt.Printf("    MIXIN:%v=%v\n", mixinName, paramSplit)
+
 	}
 
-	compiledMixin := strings.Join(muxColl, "\n")
+}
 
-	re := regexp.MustCompile(`\@mixin (.*?)\(`)
-	mixinFunc := re.FindStringSubmatch(compiledMixin)
-	mixName := mixinFunc[1]
-
-	muxinFuncs[mixName] = compiledMixin
-
-	re = regexp.MustCompile(`\((.*?)\)`)
-	params := re.FindStringSubmatch(compiledMixin)
-	params = strings.Split(params[1], ",")
-
-	muxinParams[mixName] = params
-
-	return count
-
+func ReplaceMixins(name string, params []string) string {
+	mix := mixins[name]
+	mixParams := mixinParams[name]
+	for k, m := range mixParams {
+		if strings.Contains(params[k], "(") {
+			params[k] += ")"
+		}
+		mix = strings.Replace(mix, m, params[k], 4)
+	}
+	return mix
 }

@@ -7,3 +7,9 @@
 @mixin awesome($property) {
     color: $property;
 }
+
+@mixin coolstuff($width,$color) {
+    width: $width;
+    color: $color;
+    background-color: $color;
+}

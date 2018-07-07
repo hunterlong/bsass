@@ -2,48 +2,35 @@ package main
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 )
 
-func CollectVariables(file string) map[string]string {
+func ScanAllVars(contents string) {
+	baseLines := strings.Split(contents, "\n")
 
-	if strings.Contains(file, "http") {
-		remote := DownloadRemote(file)
-		baseCss = append(baseCss, remote)
-		return scssVars
+	for _, v := range baseLines {
+		re := regexp.MustCompile(`\$(.*)*\;`)
+		varRegex := re.FindStringSubmatch(v)
+		if len(varRegex) <= 1 {
+			continue
+		}
+		re = regexp.MustCompile(`\$(.*?)\:`)
+		regName := re.FindStringSubmatch(varRegex[0])
+		re = regexp.MustCompile(`\:(.*?)\;`)
+		regVal := re.FindStringSubmatch(varRegex[0])
+
+		if len(regVal) <= 1 {
+			continue
+		}
+
+		varValue := removeSpaces(regVal[1])
+		varName := removeSpaces(regName[1])
+
+		scssVars[varName] = varValue
+
+		fmt.Printf("    VAR:%v=%v\n", varName, scssVars[varName])
+
 	}
 
-	location := fmt.Sprintf("%v/%v.scss", pathJoin, file)
-	importedData := openFile(location)
-	importedRows := strings.Split(string(importedData), "\n")
-	for i := 0; i <= len(importedRows)-1; i++ {
-		obj := importedRows[i]
-		if len(obj) == 0 {
-			continue
-		}
-
-		// importing extends
-		if obj[:1] == "%" {
-			skip := CollectExtended(i, importedRows)
-			i += skip
-			continue
-		}
-
-		// importing imports
-		if obj[:1] == "@" {
-			skip := CollectMixin(i, importedRows)
-			i += skip
-			continue
-		}
-
-		// importing variables
-		if obj[:1] != "$" {
-			baseCss = append(baseCss, obj)
-			continue
-		}
-
-		varPass := strings.Split(obj, ": ")
-		scssVars[varPass[0]] = varPass[1][0 : len(varPass[1])-1]
-	}
-	return scssVars
 }

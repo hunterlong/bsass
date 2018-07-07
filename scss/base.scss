@@ -1,8 +1,8 @@
-@import 'variables'
-@import 'partial'
-@import 'mixins'
-@import 'extended'
-@import 'https://assets.statup.io/remote.css'
+@import 'reset';
+@import 'variables';
+@import 'mixins';
+@import 'extended';
+@import 'https://assets.statup.io/remote.css';
 
 .box {
     @include transform(rotate(30deg));
@@ -10,6 +10,18 @@
 
 .box_awesome {
     @include awesome(#bababa);
+}
+
+.super_box {
+  @include coolstuff(100px,green);
+}
+
+.darken_me {
+  background-color: darken($box-color, 30%);
+}
+
+.divide_hald {
+  padding: $container / 4 + 8;
 }
 
 .message {
@@ -54,7 +66,11 @@
 }
 
 .test {
-   color: $container-color;
+    color: $container-color;
+}
+.test2 {
+    color: #73ff6e;
+    color: #3a8037;
 }
 
 .new-div {

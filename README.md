@@ -87,6 +87,20 @@ html, body, ul, ol {
     padding: 5rem;
 }
 ```
+## Functions
+```scss
+$box-color: #5cd338;
+```
+```scss
+.darken_me {
+  background-color: darken($box-color, 30%);
+}
+```
+```css
+.darken_me {
+  background-color: #1c3f11
+}
+```
 
 ## Mixins
 ```scss

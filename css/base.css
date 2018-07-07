@@ -2,71 +2,75 @@ html, body, ul, ol {
   margin: 0;
   padding: 0;
 }
+
+
+
 .remote_location {
     color: #bababa;
 }
-
 .awesome_test {
     background-color: orange;
 }
-
 .box {
   -webkit-transform: rotate(30deg);
       -ms-transform: rotate(30deg);
           transform: rotate(30deg);
 }
-
 .box_awesome {
     color: #bababa;
 }
-
+.super_box {
+    width: 100px;
+    color: green;
+    background-color: green;
+}
+.darken_me {
+  background-color: #1c3f11;
+}
+.divide_hald {
+  padding: 203rem;
+}
 .message {
   border: 1px solid #ccc;
   padding: 10px;
   color: #333;
 }
-
 .message2 {
   color: #333;
 }
-
 .container {
     width: 780rem;
     padding: 5rem;
 }
-
 .container .mobile {
-    background-color: #000000;
+    background-color: 0;
     padding: -5rem;
 }
-
 .math {
    padding-left: 700rem;
    padding-right: 800rem;
    padding-bottom: 7800rem;
    padding-top: 156rem;
 }
-
 .divide {
    padding: 156rem;
 }
-
 .subtract {
    padding: 700rem;
 }
-
 .addition {
    padding: 800rem;
 }
-
 .multiply {
    padding: 7800rem;
 }
-
 .test {
-   color: #000000;
+    color: #000000;
 }
-
+.test2 {
+    color: #73ff6e;
+    color: #3a8037;
+}
 .new-div {
    color: #000000;
 }

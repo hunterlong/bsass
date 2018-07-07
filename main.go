@@ -2,34 +2,189 @@ package main
 
 import (
 	"fmt"
+	"github.com/Knetic/govaluate"
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 )
 
 var (
-	VERSION      string
-	scssVars     map[string]string
-	muxinFuncs   map[string]string
-	muxinParams  map[string][]string
-	extendsFuncs map[string]string
-	baseCss      []string
-	compiledCss  string
-	directory    string
-	pathJoin     string
+	VERSION        string
+	scssVars       map[string]string
+	imports        map[string]string
+	includes       map[string]string
+	includesParams map[string][]string
+	mixins         map[string]string
+	mixinParams    map[string][]string
+	extends        map[string]string
+
+	recompiledCss []string
+	directory     string
+	pathJoin      string
+
+	onLine  int
+	onFile  string
+	errLine string
 )
 
 func init() {
 	scssVars = make(map[string]string)
-	muxinFuncs = make(map[string]string)
-	muxinParams = make(map[string][]string)
-	extendsFuncs = make(map[string]string)
+	imports = make(map[string]string)
+	includes = make(map[string]string)
+	includesParams = make(map[string][]string)
+	mixins = make(map[string]string)
+	mixinParams = make(map[string][]string)
+	extends = make(map[string]string)
+
 	var err error
 	directory, err = filepath.Abs(filepath.Dir(os.Args[0]))
 	if err != nil {
 		panic(err)
 	}
+}
+
+func ScanAllExtends(contents string) {
+	baseLines := strings.Split(contents, "\n")
+
+	for _, v := range baseLines {
+		extendName := regexSingle(`\%(.*?) \{`, v)
+		if extendName == "" {
+			continue
+		}
+
+		extendSprint := fmt.Sprintf(`%v {([^}]*)}`, extendName)
+		fullExtend := regexSingle(extendSprint, contents)
+
+		extends[extendName] = fullExtend[1 : len(fullExtend)-1]
+
+		fmt.Printf("    EXTEND:%v\n", extendName)
+
+	}
+
+}
+
+func ScanAll(filename string) {
+	scssFile, err := ioutil.ReadFile(filename)
+	if err != nil {
+		panic(err)
+	}
+	scssData := string(scssFile)
+
+	ScanAllImports(scssData)
+
+	ScanAllVars(scssData)
+
+	ScanAllMixins(scssData)
+
+	ScanAllExtends(scssData)
+
+	fmt.Printf("Scan Complete. %v vars | %v mixins | %v extends\n", len(scssVars), len(mixins), len(extends))
+
+	fmt.Println("Beginning replacement process now...")
+
+}
+
+func SassReplacement(filename string) {
+	onFile = filename
+	scssFile, err := ioutil.ReadFile(filename)
+	if err != nil {
+		ThrowError(err)
+	}
+	scssData := string(scssFile)
+	baseLines := strings.Split(scssData, "\n")
+
+	for k, v := range baseLines {
+		onLine = k
+		errLine = v
+		if len(v) == 0 {
+			continue
+		}
+
+		// search for @import in line
+		importName := regexSingle(`\@import '(.*?)'\;`, v)
+		if importName != "" {
+			recompiledCss = append(recompiledCss, ReplaceImport(importName))
+			continue
+		}
+
+		// search for @include in line
+		included := regexSingle(`\@include (.*?)\;`, v)
+		if included != "" {
+			mixName := regexSingle(`(.*?)\(`, included)
+			mixParams := regexSingle(`\((.*?)\)`, included)
+			params := strings.Split(mixParams, ",")
+			mixData := ReplaceMixins(mixName, params)
+			recompiledCss = append(recompiledCss, mixData)
+			continue
+		}
+
+		// search for @extend in line
+		extended := regexSingle(`\@extend %(.*?)[;|\s]`, v)
+		if extended != "" {
+			extendData := extends[extended]
+			recompiledCss = append(recompiledCss, extendData)
+			continue
+		}
+
+		function := regexSingle(`\:(.*?)\(\$`, removeSpaces(v))
+		if len(function) != 0 {
+			switch function {
+
+			case "darken":
+				funcParams := regexSingle(`\$(.*?)\)`, removeSpaces(v))
+				splitParams := strings.Split(funcParams, ",")
+				color := darken(scssVars[splitParams[0]], FloatInString(splitParams[1]))
+				cssEntry := strings.Split(v, ":")
+				out := fmt.Sprintf("%v: %v;", cssEntry[0], color)
+				recompiledCss = append(recompiledCss, out)
+				continue
+			}
+
+		}
+
+		// search for $variable in line
+		variable := regexMultiple(`\$(.*?)[;|\s]`, v)
+		if len(variable) != 0 {
+			stringLine := v
+
+			for _, va := range variable {
+				stringLine = strings.Replace(stringLine, "$"+va, scssVars[va], 1)
+			}
+
+			if strings.ContainsAny(stringLine, "-+*/") {
+				math := regexSingle(`\:(.*)`, stringLine)
+				math = removeSpaces(math)
+				reg := regexp.MustCompile(`[^0-9|/|+|\-|*]+`)
+				mathProblem := reg.ReplaceAllString(math, "")
+				varType := regexSingle(`([a-zA-Z]+)`, math)
+				expression, err := govaluate.NewEvaluableExpression(mathProblem)
+				if err != nil {
+					ThrowError(err)
+					continue
+				}
+				result, err := expression.Evaluate(nil)
+				if err != nil {
+					ThrowError(err)
+					continue
+				}
+				cssEntry := strings.Split(stringLine, ":")
+				stringLine = fmt.Sprintf("%v: %v%v;", cssEntry[0], result, varType)
+			}
+
+			recompiledCss = append(recompiledCss, stringLine)
+			continue
+		}
+
+		recompiledCss = append(recompiledCss, v)
+	}
+
+}
+
+func ThrowError(err error) {
+	fmt.Printf("\nError in '%v', line #%v, %v\nIssue: %v\n", onFile, onLine+1, err, errLine)
+	os.Exit(2)
 }
 
 func main() {
@@ -53,96 +208,14 @@ func main() {
 	pathDir := strings.Split(scss, "/")
 	pathJoin = strings.Join(pathDir[:len(pathDir)-1], "/")
 
-	scssFile, err := ioutil.ReadFile(scss)
-	if err != nil {
-		panic(err)
-	}
+	fmt.Printf("Scanning file %v...\n", scss)
 
-	baseLines := strings.Split(string(scssFile), "\n")
+	ScanAll(scss)
 
-	for k, v := range baseLines {
+	SassReplacement(scss)
 
-		imports := strings.Contains(v, "@import")
-		includes := strings.Contains(v, "@include")
-		extends := strings.Contains(v, "@extend")
+	saveFile(css, strings.Join(recompiledCss, "\n"))
 
-		if imports {
-
-			importFile := strings.Split(v, "'")
-
-			CollectVariables(importFile[1])
-
-		} else if includes {
-
-			ParseInclude(k, baseLines)
-
-		} else if extends {
-
-			ParseExtended(k, baseLines)
-
-		} else {
-
-			baseCss = append(baseCss, v)
-
-		}
-
-	}
-
-	//renderCss := strings.Join(baseCss, "\n")
-
-	//var renderCss string
-
-	var unvarredScss []string
-	for _, b := range baseCss {
-		if strings.Contains(b, "$") {
-			var objVar string
-			obj := strings.Split(b, "$")
-			sobj := strings.Split(obj[1], " ")
-			objVar = sobj[0]
-			if sobj[0][len(sobj[0])-1:] == ";" {
-				objVar = objVar[0 : len(sobj[0])-1]
-			}
-			objReplace := fmt.Sprintf("$%v", objVar)
-			out := strings.Replace(b, objReplace, scssVars[objReplace], 1)
-			unvarredScss = append(unvarredScss, out)
-			continue
-		}
-		unvarredScss = append(unvarredScss, b)
-	}
-
-	compiled := strings.Join(unvarredScss, "\n")
-
-	compiled = ScanRows(compiled)
-
-	saveFile(css, compiled)
 	fmt.Printf("Saved rendered CSS file to: %v\n", css)
-
-}
-
-func ScanRows(base string) string {
-
-	var rendered []string
-
-	splitBase := strings.Split(base, "\n")
-
-	for _, l := range splitBase {
-
-		cut := strings.Split(l, ": ")
-		if len(cut) <= 1 {
-			rendered = append(rendered, l)
-			continue
-		}
-
-		// check for any math operations
-		prevAmount := len(rendered)
-		rendered = checkOperations(cut, rendered)
-		if prevAmount != len(rendered) {
-			continue
-		}
-
-		rendered = append(rendered, l)
-	}
-
-	return strings.Join(rendered, "\n")
 
 }
