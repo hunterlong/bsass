@@ -3,12 +3,18 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="css/theme.css">
+    <link rel="icon" href="favicon.ico">
     <title>bsass - it's basically sass</title>
     <meta name="description" content="bsass can compile sass/scss files into css on any operating system with zero requirements.">
     <meta name="author" content="Hunter Long">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="https://assets.statup.io/codemirror.css">
+    <link rel="stylesheet" href="https://assets.statup.io/codemirror-colorpicker.css"/>
+
     <!--[if lt IE 9]>
     <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -18,33 +24,55 @@
 <div class="container">
     <img class="logo" alt="bsass - sass compiler" src="https://img.cjx.io/bsasslogo.png">
 
-    <p>bsass <span id="version">0.0</span> Glad you made it, click on one of the button below to download <b>bsass</b></p>
+    <p class="text-center">bsass <span id="version">0.0</span> Glad you made it, click on one of the button below to download <b>bsass</b></p>
 
-    <p>
-        <a class="btn btn-outline-secondary" id="mac_download" href="#"><i class="fa fa-apple" aria-hidden="true"></i> Mac</a>
-        <a class="btn btn-outline-secondary" id="win_download" href="#"><i class="fa fa-windows" aria-hidden="true"></i> Windows</a>
-        <a class="btn btn-outline-secondary" id="linux_download" href="#"><i class="fa fa-linux" aria-hidden="true"></i> Linux</a>
-        <a class="btn btn-outline-secondary" href="https://github.com/hunterlong/bsass"><i class="fa fa-github" aria-hidden="true"></i> Github</a>
+    <p class="text-center">
+        <a class="btn btn-sm btn-outline-secondary" id="mac_download" href="#"><i class="fa fa-apple" aria-hidden="true"></i> Mac</a>
+        <a class="btn btn-sm btn-outline-secondary" id="win_download" href="#"><i class="fa fa-windows" aria-hidden="true"></i> Windows</a>
+        <a class="btn btn-sm btn-outline-secondary" id="linux_download" href="#"><i class="fa fa-linux" aria-hidden="true"></i> Linux</a>
+        <a class="btn btn-sm btn-outline-secondary" href="https://github.com/hunterlong/bsass"><i class="fa fa-github" aria-hidden="true"></i> Github</a>
     </p>
 
-    <p>
+    <p class="small text-center">
         <a href="" id="win32">Windows x32</a> | <a href="" id="linux32">Linux x32</a> | <a href="" id="linuxalpine">Alpine</a> | <a href="" id="arm7">arm7</a>
     </p>
 
     <div class="col-12">
 
+        <textarea class="codeview">@import 'reset';
+@import 'variables';
+
+.container {
+  width: $container;
+}
+.box {
+  @include transform(rotate(30deg));
+}
+.box_awesome {
+  @include awesome(#bababa);
+}</textarea>
 
 
     </div>
 
 </div>
-
+<script src="https://assets.statup.io/codemirror.js"></script>
+<script src="https://assets.statup.io/css.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 <script language="javascript" type="text/javascript">
 
     $(document).ready(function () {
         GetLatestReleaseInfo();
+
+        $.each($(".codeview"), function(k, v) {
+            var codeview = CodeMirror.fromTextArea(v, {
+                lineNumbers: true,
+                matchBrackets: false,
+                mode: "text/x-scss"
+            });
+        })
+
     });
 
     function GetLatestReleaseInfo() {
