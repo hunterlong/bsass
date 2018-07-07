@@ -37,8 +37,16 @@
         <a href="" id="win32">Windows x32</a> | <a href="" id="linux32">Linux x32</a> | <a href="" id="linuxalpine">Alpine</a> | <a href="" id="arm7">arm7</a>
     </p>
 
-    <div class="col-12">
 
+    <div class="col-12 install_mac d-none">
+        <textarea class="shell_codeview">#!/bin/bash
+brew tap hunterlong/bsass
+brew install bsass
+        </textarea>
+    </div>
+
+    <div class="col-12 mt-4">
+        <h6>Standard SCSS syntax and functions</h6>
         <textarea class="codeview">@import 'reset';
 @import 'variables';
 
@@ -52,12 +60,32 @@
   @include awesome(#bababa);
 }</textarea>
 
+    </div>
+
+    <div class="col-12 mt-4">
+
+<h6>Compiles SCSS into CSS</h6>
+<textarea class="codeview">
+.container {
+    width: 780rem;
+    padding: 5rem;
+}
+.box {
+    -webkit-transform: rotate(30deg);
+        -ms-transform: rotate(30deg);
+            transform: rotate(30deg);
+}
+.box_awesome {
+    color: #bababa;
+}
+</textarea>
 
     </div>
 
 </div>
 <script src="https://assets.statup.io/codemirror.js"></script>
 <script src="https://assets.statup.io/css.js"></script>
+<script src="https://codemirror.net/mode/shell/shell.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 <script language="javascript" type="text/javascript">
@@ -67,9 +95,17 @@
 
         $.each($(".codeview"), function(k, v) {
             var codeview = CodeMirror.fromTextArea(v, {
-                lineNumbers: true,
+                lineNumbers: false,
                 matchBrackets: false,
                 mode: "text/x-scss"
+            });
+        })
+
+        $.each($(".shell_codeview"), function(k, v) {
+            var shellview = CodeMirror.fromTextArea(v, {
+                mode: 'shell',
+                lineNumbers: true,
+                matchBrackets: false
             });
         })
 

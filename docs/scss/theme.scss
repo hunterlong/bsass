@@ -1,8 +1,7 @@
 @import 'variables';
 
 .container {
-  width: 100%;
-  max-width: $container-max-width;
+  max-width: $container-max-width !important;
   margin-top: $container-margin-top;
   margin: 0 auto;
 }
