@@ -5,13 +5,35 @@
 </p>
 
 # bsass (Basically SASS)
-`bsass` is a simple application that will render SCSS files into precompile CSS files.
+`bsass` is a simple application that will compile `.scss` files into `.css` files using the normal `sass` parameters and protocol. 
 
 # Why bsass is bsass
-bsass was created to be a micro scss compiler without any requirements, all you need is the precompiled binary for your operating system.
+bsass was created to be a micro scss compiler without any requirements, all you need is the precompiled binary for your operating system. I personally needed something that could compile sass on [Alpine linux](https://github.com/hunterlong/bsass/releases/latest) for my Docker project called [Statup](https://github.com/hunterlong/statup).
 
 # No Requirements
-Unlike other sass compilers, bsass has 0 requirements. Download the latest release for your operating system and your good to go.
+Unlike other sass compilers, bsass has 0 requirements. Download the latest release for your operating system and your good to go. `bsass` is less than 3mb after extracting! No need to install node, ruby, go, C, or anything else! 
+
+# Install
+###### MacOS install with brew
+```bash
+brew tap hunterlong/bsass
+brew install bsass
+```
+###### Linux install with bash/curl
+```bash
+bash <(curl -s https://bsass.app/install.sh)
+statup version
+```
+###### Docker snippet
+```bash
+FROM alpine:latest
+ENV VERSION=v0.12
+RUN apk --no-cache add libstdc++ ca-certificates
+RUN wget -q https://github.com/hunterlong/bsass/releases/download/$VERSION/bsass-linux-alpine.tar.gz && \ 
+      tar -xvzf bsass-linux-alpine.tar.gz && \ 
+      chmod +x bsass && \ 
+      mv bsass /usr/local/bin/bsass
+```
 
 ## Commands
 ```bash
