@@ -201,7 +201,7 @@ Make's your CSS easier to handle for the future.
 - [x] Functions `darken("#bababa", 25%)`
 
 ## License
-MIT - I hope `bsass` is working your your application.
+MIT - I hope `bsass` is working in your application. :information_desk_person:
 
 
 
