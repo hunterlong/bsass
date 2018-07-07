@@ -1,0 +1,12 @@
+@import 'variables';
+
+.container {
+  width: 100%;
+  max-width: $container-max-width;
+  text-align: center;
+  margin: 0 auto;
+}
+
+.logo {
+  width: 100%;
+}

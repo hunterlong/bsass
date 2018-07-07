@@ -1,0 +1,10 @@
+
+.container {
+  width: 100%;
+  max-width: 1080px;
+  text-align: center;
+  margin: 0 auto;
+}
+.logo {
+  width: 100%;
+}
