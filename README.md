@@ -1,7 +1,7 @@
 <img src="https://img.cjx.io/bsasslogo.png">
 <p align="center">
     <code>bsass</code> - basically sass<br>
-    <a href="https://github.com/hunterlong/bsass/releases/latest">Linux</a> | <a href="https://github.com/hunterlong/bsass/releases/latest">Mac</a> | <a href="https://github.com/hunterlong/bsass/releases/latest">Windows</a> | <a href="https://github.com/hunterlong/bsass/releases/latest">Alpine</a> | <a href="https://github.com/hunterlong/bsass/releases/latest">Other</a>
+    <a href="https://github.com/hunterlong/bsass/releases/latest">Linux</a> | <a href="https://github.com/hunterlong/bsass/releases/latest">Mac</a> | <a href="https://github.com/hunterlong/bsass/releases/latest">Windows</a> | <a href="https://github.com/hunterlong/bsass/releases/latest">Alpine</a> | <a href="https://github.com/hunterlong/bsass/releases/latest">Other</a> | <a href="https://bsass.app">bsass.app</a>
 </p>
 
 # bsass (Basically SASS)
