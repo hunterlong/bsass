@@ -1,3 +1,9 @@
+<img src="https://img.cjx.io/bsasslogo.png">
+<p align="center">
+    <code>bsass</code> - basically sass<br>
+    <a href="https://github.com/hunterlong/bsass/releases/latest">Linux</a> | <a href="https://github.com/hunterlong/bsass/releases/latest">Mac</a> | <a href="https://github.com/hunterlong/bsass/releases/latest">Windows</a> | <a href="https://github.com/hunterlong/bsass/releases/latest">Alpine</a> | <a href="https://github.com/hunterlong/bsass/releases/latest">Other</a>
+</p>
+
 # bsass (Basically SASS)
 `bsass` is a simple application that will render SCSS files into precompile CSS files.
 
@@ -12,8 +18,9 @@ Unlike other sass compilers, bsass has 0 requirements. Download the latest relea
 bsass version
 //bsass v1.34
 ```
+Compile a file by using `bsass <scss file> <output css>`.
 ```bash
-bsass scss/base.scss css/base.css
+bsass theme.scss theme.css
 ```
 ##### loads `base.scss` and exports a compiled css to `base.css`
 
@@ -37,7 +44,7 @@ $container-padding: 5rem;
 ```
 
 ## Math
-You can do math, and more complex math of other objects
+You can do math, and more complex math of other objects.
 ```scss
 $container: 780rem;
 ```
@@ -65,11 +72,11 @@ $container: 780rem;
 ```
 
 ## Importing
-Just like normal, but you can include an http file.
+Just like normal, but you can include an http file if you need to.
 ```scss
-@import 'reset'
-@import 'variables'
-@import 'https://assets.statup.io/remote.css'
+@import 'reset';
+@import 'variables';
+@import 'https://assets.statup.io/remote.css';
 
 .container {
     width: $container;
@@ -117,6 +124,8 @@ $box-color: #5cd338;
   background-color: #4aa92d;
 }
 ```
+- [x] `darken` darken hex code color down a percentage
+- [x] `lighten` lighten hex code color up a percentage
 
 ## Mixins
 Mix it up and do it like you normally would with sass.
@@ -161,6 +170,16 @@ Make's your CSS easier to handle for the future.
   color: #333;
 }
 ```
+
+## Features
+- [x] Variables `$container: 500px`
+- [x] Import `@import 'reset'`
+- [x] Mixins `@mixin transform($property)`
+- [x] Extends `%extend`
+- [x] Functions `darken("#bababa", 25%)`
+
+## License
+MIT - I hope `bsass` is working your your application.
 
 
 
