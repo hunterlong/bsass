@@ -48,14 +48,8 @@ tar -czvf $APP-linux-arm5.tar.gz $APP && rm -f $APP
 mv $APP-linux-arm64 $APP
 tar -czvf $APP-linux-arm64.tar.gz $APP && rm -f $APP
 
-mv $APP-ios-5.0-arm64 $APP
-tar -czvf $APP-ios-arm64.tar.gz $APP && rm -f $APP
-
 mv $APP-ios-5.0-armv7 $APP
 tar -czvf $APP-ios-arm7.tar.gz $APP && rm -f $APP
-
-mv $APP-android-16-386 $APP
-tar -czvf $APP-android-16-x32.tar.gz $APP && rm -f $APP
 
 mv $APP-android-16-arm $APP
 tar -czvf $APP-android-16-arm.tar.gz $APP && rm -f $APP
@@ -71,7 +65,3 @@ tar -czvf $APP-linux-mips-x64le.tar.gz $APP && rm -f $APP
 
 mv $APP-linux-mipsle $APP
 tar -czvf $APP-linux-mipsle.tar.gz $APP && rm -f $APP
-
-tar -zcvf $APP-android-16-aar.tar.gz $APP-android-16-aar && rm -rf $APP-android-16-aar
-
-tar -zcvf $APP-ios-5.0-framework.tar.gz $APP-ios-5.0-framework && rm -rf $APP-ios-5.0-framework

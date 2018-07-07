@@ -15,7 +15,7 @@ services:
 
 env:
   global:
-     - VERSION=0.13
+     - VERSION=0.14
 
 matrix:
   allow_failures:
@@ -30,11 +30,7 @@ deploy:
   - provider: releases
     api_key: $GH_TOKEN
     file:
-      - "build/bsass-android-16-aar.tar.gz"
       - "build/bsass-android-16-arm.tar.gz"
-      - "build/bsass-android-16-x32.tar.gz"
-      - "build/bsass-ios-5.0-framework.tar.gz"
-      - "build/bsass-ios-arm64.tar.gz"
       - "build/bsass-ios-arm7.tar.gz"
       - "build/bsass-linux-alpine.tar.gz"
       - "build/bsass-linux-arm5.tar.gz"

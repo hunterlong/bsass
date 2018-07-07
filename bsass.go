@@ -19,11 +19,9 @@ var (
 	mixins         map[string]string
 	mixinParams    map[string][]string
 	extends        map[string]string
-
 	RecompiledCss []string
 	directory     string
 	PathJoin      string
-
 	onLine  int
 	onFile  string
 	errLine string
@@ -31,7 +29,7 @@ var (
 
 func init() {
 	if VERSION == "" {
-		VERSION = "0.13"
+		VERSION = "0.14"
 	}
 	scssVars = make(map[string]string)
 	imports = make(map[string]string)
