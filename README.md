@@ -13,6 +13,8 @@ bsass was created to be a micro scss compiler without any requirements, all you 
 # No Requirements
 Unlike other sass compilers, bsass has 0 requirements. Download the latest release for your operating system and your good to go. `bsass` is less than 3mb after extracting! No need to install node, ruby, go, C, or anything else! 
 
+<p align="center"><img width="75%" src="https://img.cjx.io/bsassrun.gif"></p>
+
 # Install
 ###### MacOS install with brew
 ```bash
