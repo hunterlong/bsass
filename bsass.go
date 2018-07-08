@@ -30,7 +30,7 @@ var (
 
 func init() {
 	if VERSION == "" {
-		VERSION = "0.14"
+		VERSION = "0.16"
 	}
 	scssVars = make(map[string]string)
 	imports = make(map[string]string)
@@ -80,7 +80,7 @@ func ScanAll(filename string) string {
 
 	Log("Scan Complete. %v vars | %v mixins | %v extends\n", len(scssVars), len(mixins), len(extends))
 
-	Log("Beginning replacement process now...")
+	Log("Beginning replacement process now...\n")
 
 	return scssData
 }
@@ -117,8 +117,9 @@ func SassReplacement(filename string) {
 		if included != "" {
 			mixName := regexSingle(`(.*?)\(`, included)
 			mixParams := regexSingle(`\((.*?)\)`, included)
-			params := strings.Split(mixParams, ",")
-			mixData := ReplaceMixins(mixName, params)
+			params := strings.Split(removeSpaces(mixParams), ",")
+			inParams := ReplaceVarArray(params)
+			mixData := ReplaceMixins(mixName, inParams)
 			RecompiledCss = append(RecompiledCss, mixData)
 			continue
 		}
@@ -132,24 +133,34 @@ func SassReplacement(filename string) {
 		}
 
 		//search for functions like 'darken'
-		function := regexSingle(`\:(.*?)\(\$`, removeSpaces(v))
-		if len(function) != 0 {
+		funcVar := regexMultiple(`\:(.*) (.*)\((.*)\)(.*)\;`, v)
+		if len(funcVar) != 0 {
+			function := removeSpaces(funcVar[1])
+			if function != "darken" && function != "lighten" {
+				continue
+			}
+			exFunc := fmt.Sprintf(`:(.*)%v\((.*)\)(.*)\;`, function)
+			otherElems := regexMultiple(exFunc, v)
+			prependStyle := otherElems[0]
+
 			switch function {
 
 			case "darken":
-				funcParams := regexSingle(`\$(.*?)\)`, removeSpaces(v))
+				funcParams := regexSingle(`\((.*)\);`, removeSpaces(v))
 				splitParams := strings.Split(funcParams, ",")
-				color := darken(scssVars[splitParams[0]], FloatInString(splitParams[1]))
+				inParams := ReplaceVarArray(splitParams)
+				color := darken(removeSpaces(inParams[0]), FloatInString(inParams[1]))
 				cssEntry := strings.Split(v, ":")
-				out := fmt.Sprintf("%v: %v;", cssEntry[0], color)
+				out := fmt.Sprintf("%v:%v%v;", cssEntry[0], prependStyle, color)
 				RecompiledCss = append(RecompiledCss, out)
 				continue
 			case "lighten":
-				funcParams := regexSingle(`\$(.*?)\)`, removeSpaces(v))
+				funcParams := regexSingle(`\((.*)\);`, removeSpaces(v))
 				splitParams := strings.Split(funcParams, ",")
-				color := lighten(scssVars[splitParams[0]], FloatInString(splitParams[1]))
+				inParams := ReplaceVarArray(splitParams)
+				color := lighten(removeSpaces(inParams[0]), FloatInString(inParams[1]))
 				cssEntry := strings.Split(v, ":")
-				out := fmt.Sprintf("%v: %v;", cssEntry[0], color)
+				out := fmt.Sprintf("%v:%v%v;", cssEntry[0], prependStyle, color)
 				RecompiledCss = append(RecompiledCss, out)
 				continue
 			}
@@ -169,10 +180,11 @@ func SassReplacement(filename string) {
 					err := fmt.Sprintf("missing variable %v %v %v\n", va, errLine, onLine)
 					ThrowError(err)
 				}
-				stringLine = strings.Replace(stringLine, "$"+va, scssVars[va], 1)
+				stringLine = strings.Replace(stringLine, "$"+va, scssVars[va], 2)
 			}
 
-			if strings.ContainsAny(stringLine, "-+*/") {
+			mathCheck := regexMultiple(`\:(.*) -|\+|\/|\* (.*)\;`, stringLine)
+			if len(mathCheck) > 0 {
 				math := regexSingle(`\:(.*)`, stringLine)
 				math = removeSpaces(math)
 				reg := regexp.MustCompile(`[^0-9|/|+|\-|*]+`)
@@ -220,5 +232,6 @@ func ThrowError(err interface{}) {
 	c := color.New(color.FgHiRed)
 	msg := fmt.Sprintf("\n  Line #%v %v\n  Issue: %v\n", onLine+1, onFile, err)
 	c.Printf(msg)
+	panic(err)
 	os.Exit(2)
 }

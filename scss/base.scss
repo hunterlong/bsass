@@ -4,6 +4,25 @@
 @import 'extended';
 @import 'https://assets.statup.io/remote.css';
 
+.container {
+  width: $container !important;
+  background-color: $container-bg;
+  padding: $container-padding;
+}
+
+.test_colorize {
+  background-color: $box-color;
+  border: 1px solid darken($box-color, 30%);
+}
+
+.test_colorize {
+  background-color: $box-color;
+}
+
+.super_box_mod {
+  @include coolstuff(100px, $box-color);
+}
+
 .box {
     @include transform(rotate(30deg));
 }
@@ -22,11 +41,6 @@
 
 .lighten_me {
   background-color: lighten($box-color, 80%);
-}
-
-.test_colorize {
-  background-color: $box-color;
-  border: 1px solid darken($box-color, 30%);
 }
 
 .missing_vars {
@@ -52,11 +66,6 @@
 .message2 {
   @extend %awesome-design;
   width: 420px;
-}
-
-.container {
-    width: $container;
-    padding: $container-padding;
 }
 
 .container .mobile {

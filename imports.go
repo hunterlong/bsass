@@ -3,7 +3,6 @@ package bsass
 import (
 	"fmt"
 	"io/ioutil"
-	"regexp"
 	"strings"
 )
 
@@ -14,11 +13,10 @@ func ScanAllImports(contents string) {
 		if len(v) < 8 {
 			continue
 		}
-		isImport := v[0:7]
-		if isImport == "@import" {
-			re := regexp.MustCompile(`\'(.*?)\'`)
-			regFile := re.FindStringSubmatch(v)
-			importFile := regFile[1]
+
+		importData := regexMultiple(`\@import \'(.*)\'\;`, v)
+		if len(importData) == 1 {
+			importFile := importData[0]
 
 			if strings.Contains(importFile, "http") {
 				remoteData := DownloadRemote(importFile)
@@ -30,7 +28,7 @@ func ScanAllImports(contents string) {
 
 			fileContents, err := ioutil.ReadFile(scanFile)
 			if err != nil {
-				panic(err)
+				ThrowError(err)
 			}
 
 			imports[importFile] = string(fileContents)
@@ -69,6 +67,9 @@ func ReplaceImport(name string) string {
 			continue
 		}
 		data = append(data, val)
+	}
+	if len(data) == 0 {
+		return ""
 	}
 	return strings.Join(data, "\n")
 }

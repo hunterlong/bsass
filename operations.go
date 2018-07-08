@@ -5,7 +5,10 @@ import (
 )
 
 func darken(hex string, percent float64) string {
-	c, _ := colorful.Hex(hex)
+	c, err := colorful.Hex(hex)
+	if err != nil {
+		panic(err)
+	}
 	r, g, b := c.RGB255()
 	lessR := float64(r) * (percent * 0.01) / 255
 	lessG := float64(g) * (percent * 0.01) / 255

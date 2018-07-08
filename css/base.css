@@ -5,6 +5,23 @@ html, body, ul, ol {
 
 
 
+.container {
+  width:  780px !important;
+  background-color:  #ffffff;
+  padding:  20px;
+}
+.test_colorize {
+  background-color:  #5cd338;
+  border: 1px solid #1c3f11;
+}
+.test_colorize {
+  background-color:  #5cd338;
+}
+.super_box_mod {
+    width: 100px;
+    color:  #5cd338;
+    background-color:  #5cd338;
+}
 .box {
   -webkit-transform: rotate(30deg);
       -ms-transform: rotate(30deg);
@@ -24,20 +41,15 @@ html, body, ul, ol {
 .lighten_me {
   background-color: #4aa92d;
 }
-.test_colorize {
-  background-color: 5338cd;
-  border: -29pxsoliddarken;
-}
 .missing_vars {
 }
 .divide_plus {
-  padding: 203rem;
+  padding: 203px;
 }
 .divide_multi {
-  padding: 1950rem;
+  padding: 1950px;
 }
 .divide_multi {
-  padding: 7200rem;
 }
 .message {
   border: 1px solid #ccc;
@@ -48,35 +60,31 @@ html, body, ul, ol {
   color: #333;
   width: 420px;
 }
-.container {
-    width: 780rem;
-    padding: 5rem;
-}
 .container .mobile {
-    background-color: 5338cd;
-    padding: -5rem;
+    background-color:  #5cd338;
+    padding: 10px;
 }
 .math {
-   padding-left: 700rem;
-   padding-right: 800rem;
-   padding-bottom: 7800rem;
-   padding-top: 156rem;
+   padding-left: 700px;
+   padding-right: 800px;
+   padding-bottom: 7800px;
+   padding-top: 156px;
 }
 .divide {
-   padding: 156rem;
+   padding: 156px;
 }
 .subtract {
-   padding: 700rem;
+   padding: 700px;
 }
 .addition {
-   padding: 800rem;
+   padding: 800px;
 }
 .multiply {
-   padding: 7800rem;
+   padding: 7800px;
 }
 .test {
-    color: #000000;
+    color:  #ffa0d2;
 }
 .new-div {
-   color: #000000;
+   color:  #ffa0d2;
 }

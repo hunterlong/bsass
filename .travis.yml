@@ -15,7 +15,7 @@ services:
 
 env:
   global:
-     - VERSION=0.15
+     - VERSION=0.16
 
 matrix:
   allow_failures:
@@ -59,3 +59,6 @@ before_script:
 script:
   - if [[ "$TRAVIS_BRANCH" == "master" ]]; then travis_wait 30 docker pull karalabe/xgo-latest; fi
   - if [[ "$TRAVIS_BRANCH" == "master" ]]; then /bin/bash -c .travis/build.sh; fi
+
+after_deploy:
+  - /bin/bash -c .travis/deploy.sh
